@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
 const connectMongo = require('./mongo');
-const port = 3000;
+const port = 3001; // Change this to match the listening port
 const cors = require('cors');
 
 // const routes = require('../routes/routes');
@@ -22,15 +22,20 @@ const logger = (req, res, next) => {
     next();
 }
 
+// Update CORS configuration for development
 app.use(cors({
-    origin: 'http://localhost:3001',
-  }));
-  
+    origin: '*',
+}));
+
 app.use(express.json());
 app.use(logger);
+
+app.get('/', (req, res) => {
+    res.send('Hello World');
+});
+
 app.use('/todo', require('../routes/routes')());
 
-
-app.listen(3000, () => {
+app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
 });

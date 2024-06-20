@@ -3,7 +3,6 @@ const TodoModel = require('../src/models/todoModel');
 
 const todoRoutes = () =>{
 
-    
     const router = express.Router();
 
     //get all todos
@@ -50,6 +49,30 @@ const todoRoutes = () =>{
         try{
             const completedTodo = await TodoModel.findByIdAndUpdate(id, {completed: true});
             res.json(completedTodo);
+        }catch(error){
+            res.status(500).json({message: "Server Error"});
+        }
+    });
+
+    //get a todo=
+    router.get('/getTodo/:id', async(req,res)=>{
+        const {id} = req.params;
+
+        try{
+            const todo = await TodoModel.findById(id);
+            res.json(todo);
+        }catch(error){
+            console.log(error);
+            res.status(500).json({message: "Server Error"});
+        }
+    });
+
+    router.post('/markIncomplete/:id', async(req,res)=>{
+        const {id} = req.params;
+
+        try{
+            const incompleteTodo = await TodoModel.findByIdAndUpdate(id, {completed: false});
+            res.json(incompleteTodo);
         }catch(error){
             res.status(500).json({message: "Server Error"});
         }
